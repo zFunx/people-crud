@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import uuid from 'react-uuid';
+import axios from 'axios';
 
 const nameId = 'name' + uuid()
 const emailId = 'email' + uuid()
@@ -36,6 +37,8 @@ const Index = () => {
         if (!validate()) {
             return;
         }
+
+        axios.post('https://dummy.restapiexample.com/api/v1/create', { "name": "test", "salary": "123", "age": "23" })
     }
 
     function validate() {
@@ -46,7 +49,7 @@ const Index = () => {
             tempErr.name = 'Please enter person\'s name'
             isValid = false;
         }
-        if (!formData.email || validateEmail(formData.email)) {
+        if (!formData.email || !validateEmail(formData.email)) {
             tempErr.email = 'Please enter a valid email'
             isValid = false;
         }
@@ -55,7 +58,7 @@ const Index = () => {
         return isValid;
     }
 
-    function validateEmail(email){
+    function validateEmail(email) {
         return String(email)
             .toLowerCase()
             .match(
@@ -63,7 +66,7 @@ const Index = () => {
             );
     };
 
-    function clearValidation(){
+    function clearValidation() {
         setErr(initFormData)
     }
 
