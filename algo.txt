@@ -1,0 +1,24 @@
+- (Done) Link bootstrap
+- Create a form
+    - (Done) Design fields
+    - Bind fields
+    - Add validation
+    - Integrate API
+    - Add loader
+    - Show success or failure messages
+    - Redirect to list after creating a person after 10s
+    - Add back button with caution
+- Add router
+- Create edit form
+    - use the same create form
+    - Fetch exisitng data
+    - Add validation
+    - Integrate API
+    - Add loader
+    - Show success or failure messages
+    - Do not redirect to list after updating a person
+    - Add back button with caution
+- Listing page
+    - Design cards
+    - Bind cards
+    - Add link
