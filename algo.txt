@@ -2,12 +2,13 @@
 - Create a form
     - (Done) Design fields
     - (Done) Bind fields
-    - Add validation
+    - (Done) Add validation
     - Integrate API
     - Add loader
     - Show success or failure messages
     - Redirect to list after creating a person after 10s
     - Add back button with caution
+    - Add avatar
 - Add router
 - Create edit form
     - use the same create form
