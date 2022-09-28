@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import uuid from 'react-uuid';
 import axios from 'axios';
+
+import { Link, useParams } from "react-router-dom";
 
 const nameId = 'name' + uuid()
 const emailId = 'email' + uuid()
@@ -14,9 +16,37 @@ const initFormData = {
     country: '',
 }
 
-const Index = () => {
+const Index = (props) => {
+    const { id } = useParams()
     const [formData, setFormData] = useState(initFormData)
     const [err, setErr] = useState(initFormData)
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if (id) {
+            getPerson(id);
+        }
+    }, [])
+
+    function getPerson(id) {
+        axios('/employee/' + id).then(res => {
+            setFormData({
+                name: res.data.data.employee_name,
+                email: 'Can\'t edit',
+                dob: dobFromAge(res.data.data.employee_age),
+                country: 'Can\'t edit',
+            })
+        }).catch(err => {
+            console.error('Something went wrong while fetching user');
+        })
+    }
+
+    function dobFromAge(age) {
+        var date = new Date();
+        // date.setDate(date.getDate());
+        date.setFullYear(date.getFullYear() - age);
+        return ((date.getFullYear() + '-' + date.getMonth().padStart(2, '0')) + '-' + (date.getDate()));
+    }
 
     function onchanged(key, event) {
         setErr({
@@ -38,7 +68,13 @@ const Index = () => {
             return;
         }
 
-        axios.post('https://dummy.restapiexample.com/api/v1/create', { "name": "test", "salary": "123", "age": "23" })
+        setLoading(true);
+        axios.post(`/create`, formData).then(res => {
+            setLoading(false);
+        }).catch(error => {
+            console.error('Something went wrong while creating a person', error)
+            setLoading(false);
+        })
     }
 
     function validate() {
@@ -72,7 +108,7 @@ const Index = () => {
 
     return (
         <div class="p-4 border rounded">
-            <button type="button" class="btn btn-secondary mb-3">← Back to Listing</button>
+            <Link to="/" type="button" class="btn btn-secondary mb-3">← Back to Listing</Link>
             <h2>Create a person</h2>
             <form onSubmit={createPerson}>
                 <div class="mb-3">
@@ -93,7 +129,7 @@ const Index = () => {
                     <label for={countryId} class="form-label">Country</label>
                     <input onChange={event => onchanged('country', event)} value={formData.country} type="text" class="form-control" id={countryId} />
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button disabled={loading} type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     )
